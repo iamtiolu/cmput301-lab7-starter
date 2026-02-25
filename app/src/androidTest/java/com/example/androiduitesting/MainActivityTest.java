@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -61,5 +62,42 @@ public class MainActivityTest {
         onView(withId(R.id.button_confirm)).perform(click());
 
         onData(is(instanceOf(String.class))).inAdapterView(withId(R.id.city_list)).atPosition(0).check(matches((withText("Edmonton"))));
+    }
+
+    @Test
+    public void testSwitch() {
+        onView(withId(R.id.button_add)).perform(click());
+        onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Edmonton"));
+        onView(withId(R.id.button_confirm)).perform(click());
+
+        onData(anything()).inAdapterView(withId(R.id.city_list)).atPosition(0).perform(click());
+
+        onView(withId(R.id.button_back)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testCityName() {
+        onView(withId(R.id.button_add)).perform(click());
+        onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Calgary"));
+        onView(withId(R.id.button_confirm)).perform(click());
+
+        onData(anything()).inAdapterView(withId(R.id.city_list)).atPosition(0).perform(click());
+
+        onView(withId(R.id.textView_city)).check(matches(withText("Calgary")));
+
+    }
+
+    @Test
+    public void testBackButton() {
+        onView(withId(R.id.button_add)).perform(click());
+        onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Toronto"));
+        onView(withId(R.id.button_confirm)).perform(click());
+
+        onData(anything()).inAdapterView(withId(R.id.city_list)).atPosition(0).perform(click());
+
+        onView(withId(R.id.button_back)).perform(click());
+
+        onView(withId(R.id.city_list)).check(matches(isDisplayed()));
+
     }
 }
